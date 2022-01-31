@@ -101,13 +101,14 @@ class LibriTestSamples(torch.utils.data.Dataset):
         self.sample = sample 
         
         self.X_dir = data_path + "/" + partition + "/mfcc/"
-        self.X_order_path = "test_order.csv"
+        self.X_order_path = "../../../data/test_order.csv"
         self.X_order = []
         
         with open(self.X_order_path) as f:
             f_csv = csv.reader(f)
             for row in f_csv:
                 self.X_order.append(row[0])
+            self.X_order = self.X_order[1:]
 
         self.length = len(self.X_order)
         

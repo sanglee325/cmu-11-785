@@ -93,6 +93,7 @@ def main(args):
     model = Network().to(device)
     optimizer = optim.Adam(model.parameters(), lr=args['lr'])
     criterion = torch.nn.CrossEntropyLoss()
+
     # If you want to use full Dataset, please pass None to csvpath
     train_samples = LibriSamples(data_path = args['LIBRI_PATH'], shuffle=True, partition="train-clean-100", csvpath=None)
     dev_samples = LibriSamples(data_path = args['LIBRI_PATH'], shuffle=True, partition="dev-clean")
@@ -103,7 +104,6 @@ def main(args):
         print('Dev accuracy ', test_acc)
         save_checkpoint(model)
 
-
     test_samples = LibriTestSamples(data_path = args['LIBRI_PATH'], shuffle=False, partition="test-clean")
     generate_submission(args, model, device, test_samples)
     
@@ -113,7 +113,7 @@ if __name__ == '__main__':
         'batch_size': 2048,
         'context': 0,
         'log_interval': 500,
-        'LIBRI_PATH': './data',
+        'LIBRI_PATH': '../../../data',
         'lr': 0.001,
         'epoch': 3
     }
