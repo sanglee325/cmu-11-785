@@ -14,21 +14,22 @@ class MLP0:
 
     def forward(self, A0):
 
-        Z0 = None # TODO
-        A1 = None # TODO
+        Z0 = self.layers[0].forward(A0)  # TODO
+        A1 = self.f[0].forward(Z0) # TODO
 
         if self.debug:
 
             self.Z0 = Z0
             self.A1 = A1
         
-        return NotImplemented
+        return A1
 
     def backward(self, dLdA1):
     
-        dA1dZ0 = None # TODO
-        dLdZ0  = None # TODO
-        dLdA0  = None # TODO
+        dA1dZ0 = self.f[0].backward() # TODO
+        dLdZ0  = dLdA1 * dA1dZ0 # TODO
+        dLdA0  = np.dot(dLdZ0, self.layers[0].W) # TODO
+        self.layers[0].backward(dLdZ0)
 
         if self.debug:
 
@@ -50,12 +51,12 @@ class MLP1:
         self.debug = debug
 
     def forward(self, A0):
+
+        Z0 = self.layers[0].forward(A0)  # TODO
+        A1 = self.f[0].forward(Z0) # TODO
     
-        Z0 = None # TODO
-        A1 = None # TODO
-    
-        Z1 = None # TODO
-        A2 = None # TODO
+        Z1 = self.layers[1].forward(A1) # TODO
+        A2 = self.f[1].forward(Z1) # TODO
 
         if self.debug:
             self.Z0 = Z0
@@ -63,17 +64,19 @@ class MLP1:
             self.Z1 = Z1
             self.A2 = A2
         
-        return NotImplemented
+        return A2
 
     def backward(self, dLdA2):
 
-        dA2dZ1 = None # TODO
-        dLdZ1  = None # TODO
-        dLdA1  = None # TODO
+        dA2dZ1 = self.f[1].backward() # TODO
+        dLdZ1  = dLdA2 * dA2dZ1 # TODO
+        dLdA1  = np.dot(dLdZ1, self.layers[1].W) # TODO
+        self.layers[1].backward(dLdZ1)
     
-        dA1dZ0 = None # TODO
-        dLdZ0  = None # TODO
-        dLdA0  = None # TODO
+        dA1dZ0 = self.f[0].backward() # TODO
+        dLdZ0  = dLdA1 * dA1dZ0 # TODO
+        dLdA0  = np.dot(dLdZ0, self.layers[0].W) # TODO
+        self.layers[0].backward(dLdZ0)
 
         if self.debug:
 
@@ -119,15 +122,15 @@ class MLP4:
 
         for i in range(L):
 
-            Z = None # TODO
-            A = None # TODO
+            Z = self.layers[i].forward(A) # TODO
+            A = self.f[i].forward(Z) # TODO
 
             if self.debug:
 
                 self.Z.append(Z)
                 self.A.append(A)
 
-        return NotImplemented
+        return A
 
     def backward(self, dLdA):
 
@@ -141,9 +144,10 @@ class MLP4:
 
         for i in reversed(range(L)):
 
-            dAdZ = None # TODO
-            dLdZ = None # TODO
-            dLdA = None # TODO
+            dAdZ = self.f[i].backward() # TODO
+            dLdZ = dLdA * dAdZ # TODO
+            dLdA = np.dot(dLdZ, self.layers[i].W) # TODO
+            self.layers[i].backward(dLdZ)
 
             if self.debug:
 

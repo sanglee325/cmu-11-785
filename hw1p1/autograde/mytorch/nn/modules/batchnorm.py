@@ -36,7 +36,7 @@ class BatchNorm1d:
             return NotImplemented
             
         self.Z         = Z
-        self.N         = None # TODO
+        self.N         = self.Z.shape[0] # TODO
         
         self.M         = None # TODO
         self.V         = None # TODO

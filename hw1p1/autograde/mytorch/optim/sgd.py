@@ -17,14 +17,14 @@ class SGD:
         
             if self.mu == 0:
         
-                self.l[i].W = None # TODO
-                self.l[i].b = None # TODO
+                self.l[i].W = self.l[i].W - self.lr * self.l[i].dLdW # TODO
+                self.l[i].b = self.l[i].b - self.lr * self.l[i].dLdb # TODO
                 
             else:
         
-                self.v_W[i] = None # TODO
-                self.v_b[i] = None # TODO
-                self.l[i].W = None # TODO
-                self.l[i].b = None # TODO
+                self.v_W[i] = self.mu * self.v_W[i] + self.l[i].dLdW # TODO
+                self.v_b[i] = self.mu * self.v_b[i] + self.l[i].dLdb # TODO
+                self.l[i].W = self.l[i].W - self.lr * self.v_W[i] # TODO
+                self.l[i].b = self.l[i].b - self.lr * self.v_b[i] # TODO
     
         return None
