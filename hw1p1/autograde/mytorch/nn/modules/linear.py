@@ -16,20 +16,20 @@ class Linear:
         self.A    = A
         self.N    = A.shape[0]
         self.Ones = np.ones((self.N,1), dtype="f")
-        Z         = None # TODO
+        Z         = np.dot(self.A, self.W.T) + self.b.T
         
-        return NotImplemented
+        return Z
         
     def backward(self, dLdZ):
     
-        dZdA      = None # TODO
-        dZdW      = None # TODO
+        dZdA      = self.W.T # TODO
+        dZdW      = self.A # TODO
         dZdi      = None
-        dZdb      = None # TODO
-        dLdA      = None # TODO
-        dLdW      = None # TODO
+        dZdb      = self.Ones # TODO
+        dLdA      = np.dot(dLdZ, dZdA.T) # TODO
+        dLdW      = np.dot(dLdZ.T, dZdW) # TODO
         dLdi      = None
-        dLdb      = None # TODO
+        dLdb      = np.dot(dLdZ.T, dZdb) # TODO
         self.dLdW = dLdW / self.N
         self.dLdb = dLdb / self.N
 

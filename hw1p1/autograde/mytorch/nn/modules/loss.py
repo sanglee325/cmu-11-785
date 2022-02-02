@@ -29,7 +29,7 @@ class CrossEntropyLoss:
         C      = A.shape[1]
         Ones   = np.ones((C, 1), dtype="f")
 
-        self.softmax = np.exp(self.A) * ((1/np.exp(self.A)) * Ones)
+        self.softmax = np.exp(self.A) * (1/(np.dot(np.exp(self.A), Ones)))
         crossentropy = -Y * np.log(self.softmax)
         L = np.sum(crossentropy) / N
         
@@ -37,6 +37,6 @@ class CrossEntropyLoss:
     
     def backward(self):
     
-        dLdA = None # TODO
+        dLdA = self.softmax - self.Y
         
-        return NotImplemented
+        return dLdA
