@@ -78,9 +78,10 @@ class LibriItems(torch.utils.data.Dataset):
         if context == 0:
             self.X, self.Y = X, Y
         else:
-            #self.X, self.Y = 
-            # TODO: self.X, self.Y = ... 
-            pass 
+            pad_width = (context, context)
+            self.X = np.pad(X, pad_width=pad_width, mode='constant', constant_values=0)
+            self.Y = Y
+            
         
     def __len__(self):
         return self.length
@@ -90,9 +91,11 @@ class LibriItems(torch.utils.data.Dataset):
             xx = self.X[i].flatten()
             yy = self.Y[i]
         else:
-            #xx, yy = 
             # TODO xx, yy = ...
-            pass
+            idx = i+self.context
+            xx = self.X[idx-self.context:idx+self.context+1].flatten()
+            yy = self.Y[i]
+
         return xx, yy
     
 class LibriTestSamples(torch.utils.data.Dataset):
@@ -155,9 +158,9 @@ class LibriTestItems(torch.utils.data.Dataset):
         if context == 0:
             self.X = X
         else:
-            #self.X, self.Y = 
-            # TODO: self.X, self.Y = ... 
-            pass 
+            pad_width = (context, context)
+            self.X = np.pad(X, pad_width=pad_width, mode='constant', constant_values=0)
+
         
     def __len__(self):
         return self.length
@@ -166,9 +169,9 @@ class LibriTestItems(torch.utils.data.Dataset):
         if self.context == 0:
             xx = self.X[i].flatten()
         else:
-            #xx, yy = 
-            # TODO xx, yy = ...
-            pass
+            idx = i+self.context
+            xx = self.X[idx-self.context:idx+self.context+1].flatten()
+            
         return xx
 
 def save_checkpoint(state, filename='checkpoint.pth', path='./'):

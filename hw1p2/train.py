@@ -7,8 +7,8 @@ import torch.nn as nn
 import torch.optim as optim
 from sklearn.metrics import accuracy_score
 
-from data_loader import LibriSamples, LibriItems, LibriTestSamples, LibriTestItems
-from data_loader import save_checkpoint
+from data_loader import LibriSamples, LibriItems
+from data_loader import save_checkpoint, LibriTestSamples, LibriTestItems
 from network import Network
 
 def train(args, model, device, train_samples, optimizer, criterion, epoch):
@@ -21,7 +21,7 @@ def train(args, model, device, train_samples, optimizer, criterion, epoch):
         for batch_idx, (data, target) in enumerate(train_loader):
             data = data.float().to(device)
             target = target.long().to(device)
-
+            
             optimizer.zero_grad()
             output = model(data)
             loss = criterion(output, target)
@@ -90,7 +90,8 @@ def generate_submission(args, model, device, test_samples):
 def main(args):
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     
-    model = Network().to(device)
+    input_size = (args['context'] * 2 + 1)*23
+    model = Network(input_size=input_size).to(device)
     optimizer = optim.Adam(model.parameters(), lr=args['lr'])
     criterion = torch.nn.CrossEntropyLoss()
 
@@ -111,8 +112,8 @@ def main(args):
 if __name__ == '__main__':
     args = {
         'batch_size': 2048,
-        'context': 0,
-        'log_interval': 500,
+        'context': 10,
+        'log_interval': 1000,
         'LIBRI_PATH': '../../../data',
         'lr': 0.001,
         'epoch': 3
