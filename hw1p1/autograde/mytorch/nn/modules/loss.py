@@ -8,8 +8,9 @@ class MSELoss:
         self.Y = Y
         N      = A.shape[0]
         C      = A.shape[1]
-        error  = (self.A - self.Y)**2 / (N*C)
-        L      = np.sum(error) / N
+        SE  = (self.A - self.Y)*(self.A - self.Y)
+        SSE = np.sum(SE)
+        L      = SSE / (N*C)
         
         return L
     
