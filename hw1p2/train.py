@@ -9,7 +9,7 @@ from sklearn.metrics import accuracy_score
 
 from data_loader import LibriSamples, LibriItems
 from data_loader import save_checkpoint, LibriTestSamples, LibriTestItems
-from network import Network
+from network import Network1024, Network2048
 
 def train(args, model, device, train_samples, optimizer, criterion, epoch):
     model.train()
@@ -77,7 +77,7 @@ def generate_submission(args, model, device, test_samples):
 
                 pred_y_list.extend(pred_y.tolist())
 
-    f = open('result.csv','w', newline='')
+    f = open('result_2048_8_lr005_dpa01_ctx25_e5.csv','w', newline='')
     wr = csv.writer(f)
     wr.writerow(['id', 'label'])
  
@@ -90,8 +90,8 @@ def generate_submission(args, model, device, test_samples):
 def main(args):
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     
-    input_size = (args['context'] * 2 + 1)*23
-    model = Network(input_size=input_size).to(device)
+    input_size = 3213
+    model = Network2048(input_size=input_size).to(device)
     optimizer = optim.Adam(model.parameters(), lr=args['lr'])
     criterion = torch.nn.CrossEntropyLoss()
 
@@ -103,7 +103,7 @@ def main(args):
         train(args, model, device, train_samples, optimizer, criterion, epoch)
         test_acc = test(args, model, device, dev_samples)
         print('Dev accuracy ', test_acc)
-        save_checkpoint(model)
+        save_checkpoint(model,filename='checkpoint_2048_8_lr005_dpa01_ctx25_e5.pth')
 
     test_samples = LibriTestSamples(data_path = args['LIBRI_PATH'], shuffle=False, partition="test-clean")
     generate_submission(args, model, device, test_samples)
@@ -112,10 +112,10 @@ def main(args):
 if __name__ == '__main__':
     args = {
         'batch_size': 2048,
-        'context': 10,
+        'context': 25,
         'log_interval': 1000,
         'LIBRI_PATH': '../../../data',
-        'lr': 0.001,
-        'epoch': 3
+        'lr': 5e-4,
+        'epoch': 5
     }
     main(args)
