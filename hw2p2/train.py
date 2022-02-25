@@ -98,7 +98,7 @@ def test(acc, model, test_loader, logdir):
     batch_bar = tqdm(total=len(test_loader), dynamic_ncols=True, position=0, leave=False, desc='Val')
 
     res = []
-    for i, (x, y) in enumerate(test_loader):
+    for i, (x) in enumerate(test_loader):
         x = x.to(device)
 
         with torch.no_grad():
@@ -118,13 +118,13 @@ def test(acc, model, test_loader, logdir):
 if __name__ == '__main__':
     # set options for file to run
     logpath = ARGS.log_path
-    logfile_base = f"{ARGS.name}_S{SEED}_B{BATCH_SIZE}_LR{LR}_E{EPOCHS}"
+    logfile_base = f"{ARGS.name}_{ARCH}_S{SEED}_B{BATCH_SIZE}_LR{LR}_E{EPOCHS}"
     logdir = logpath + logfile_base
 
     set_logpath(logpath, logfile_base)
     print('save path: ', logdir)
     # define model
-    model = torchvision.models.resnet34(num_classes=7000)
+    model = torchvision.models.__dict__[ARCH](num_classes=7000)
     model.to(device)
 
     # For this homework, we're limiting you to 35 million trainable parameters, as
@@ -155,7 +155,7 @@ if __name__ == '__main__':
         # You can add validation per-epoch here if you would like
         train_acc, train_loss, lr_rate = train(model, train_loader, optimizer, scheduler,
                                                      criterion, scaler, BATCH_SIZE)
-        val_acc = validate(model, val_loader)
+        val_acc = validate(model, val_loader, BATCH_SIZE)
         if BEST_VAL < val_acc:
             save_checkpoint(val_acc, model, optimizer, epoch, logdir)
             test(val_acc, model, test_loader, logdir)
