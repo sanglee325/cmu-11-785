@@ -27,6 +27,7 @@ def parse_args():
                         help='path for results')
     
     parser.add_argument('--half', action='store_true', help='')
+    parser.add_argument('--num_workers', default=4, type=int, help='num workers')
 
     return parser.parse_args()
 
