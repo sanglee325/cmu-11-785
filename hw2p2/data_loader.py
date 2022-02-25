@@ -43,13 +43,13 @@ def load_dataset(batch_size):
 
 
     train_loader = DataLoader(train_dataset, batch_size=batch_size,
-                            shuffle=True, drop_last=True, num_workers=8)
+                            shuffle=True, drop_last=True, num_workers=ARGS.num_workers)
     val_loader = DataLoader(val_dataset, batch_size=batch_size, shuffle=False,
-                            drop_last=True, num_workers=8)
+                            drop_last=True, num_workers=ARGS.num_workers)
 
     test_dataset = ClassificationTestSet(TEST_DIR, transforms.Compose(val_transforms))
     test_loader = DataLoader(test_dataset, batch_size=batch_size, shuffle=False,
-                            drop_last=False, num_workers=1)
+                            drop_last=False, num_workers=ARGS.num_workers)
 
     return train_loader, val_loader, test_loader
 
@@ -60,4 +60,4 @@ def load_veri_dataset(batch_size):
     val_veri_dataset = VerificationDataset(osp.join(DATA_DIR, "verification/verification/dev"),
                                        transforms.Compose(val_transforms))
     val_ver_loader = torch.utils.data.DataLoader(val_veri_dataset, batch_size=batch_size, 
-                                             shuffle=False, num_workers=8)
+                                             shuffle=False, num_workers=ARGS.num_workers)
