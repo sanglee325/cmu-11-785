@@ -13,8 +13,8 @@ def parse_args():
     # model seting options
     parser = argparse.ArgumentParser(description='PyTorch Training')
     parser.add_argument('--lr', default=0.1, type=float, help='learning rate')
-    parser.add_argument('--model', default='resnet34', type=str,
-                        help='model type (default: ResNet34)')
+    parser.add_argument('--model', default='sn', type=str,
+                        help='model type (default: simple network)')
     parser.add_argument('--batch-size', default=256, type=int, help='batch size')
     parser.add_argument('--epochs', default=20, type=int,
                         help='total epochs to run')

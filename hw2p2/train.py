@@ -15,6 +15,8 @@ from PIL import Image
 from sklearn.metrics import roc_auc_score
 import numpy as np
 
+from model import sn
+
 from data_loader import load_dataset
 from config import *
 
@@ -98,7 +100,7 @@ def validate(model, val_loader, batch_size):
 
     return val_acc
 
-def test(model, test_loader, logdir):
+def test(model, test_loader, logdir, name):
     model.eval()
     batch_bar = tqdm(total=len(test_loader), dynamic_ncols=True, position=0, leave=False, desc='Test')
 
@@ -117,7 +119,7 @@ def test(model, test_loader, logdir):
         
     batch_bar.close()
 
-    log_result = logdir + '/result.csv'
+    log_result = logdir + '/result_' + name +'.csv'
     with open(log_result, "w+") as f:
         f.write("id,label\n")
         for i in range(len(res)):
@@ -133,7 +135,8 @@ if __name__ == '__main__':
     set_logpath(logpath, logfile_base)
     print('save path: ', logdir)
     # define model
-    model = torchvision.models.__dict__[ARCH](num_classes=7000)
+    # model = torchvision.models.__dict__[ARCH](num_classes=7000)
+    model = sn.Network(num_classes=7000)
     model.to(device)
 
     # For this homework, we're limiting you to 35 million trainable parameters, as
@@ -169,6 +172,8 @@ if __name__ == '__main__':
         if BEST_VAL <= val_acc:
             save_checkpoint(val_acc, model, optimizer, epoch, logdir)
             best_model = model
+            BEST_VAL = val_acc
+            test(model, test_loader, logdir, str(epoch).zfill(3))
     
-    test(best_model, test_loader, logdir)
+    test(best_model, test_loader, logdir, 'best')
 
