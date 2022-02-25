@@ -26,6 +26,7 @@ def train(model, train_loader, optimizer, scheduler, criterion, scaler, batch_si
 
     num_correct = 0
     total_loss = 0
+    total = 0
 
     for i, (x, y) in enumerate(tqdm(train_loader)):
         optimizer.zero_grad()
@@ -40,6 +41,7 @@ def train(model, train_loader, optimizer, scheduler, criterion, scaler, batch_si
 
         # Update # correct & loss as we go
         num_correct += int((torch.argmax(outputs, axis=1) == y).sum())
+        total += len(x)
         total_loss += float(loss)
 
         # tqdm lets you add some details so you can monitor training as you train.
@@ -59,8 +61,8 @@ def train(model, train_loader, optimizer, scheduler, criterion, scaler, batch_si
         batch_bar.update() # Update tqdm bar
         batch_bar.close() # You need this to close the tqdm bar
 
-        train_acc = 100 * num_correct / (len(train_loader) * batch_size)
-        train_loss = float(total_loss / len(train_loader))
+        train_acc = 100 * num_correct / total
+        train_loss = float(total_loss / total)
         lr_rate = float(optimizer.param_groups[0]['lr'])
 
         
@@ -72,7 +74,9 @@ def train(model, train_loader, optimizer, scheduler, criterion, scaler, batch_si
 def validate(model, val_loader, batch_size):
     model.eval()
     batch_bar = tqdm(total=len(val_loader), dynamic_ncols=True, position=0, leave=False, desc='Val')
+
     num_correct = 0
+    total = 0
     for i, (x, y) in enumerate(val_loader):
 
         x = x.to(device)
@@ -82,36 +86,41 @@ def validate(model, val_loader, batch_size):
             outputs = model(x)
 
         num_correct += int((torch.argmax(outputs, axis=1) == y).sum())
+        total += len(x)
         batch_bar.set_postfix(acc="{:.04f}%".format(100 * num_correct / ((i + 1) * batch_size)))
 
         batch_bar.update()
         
     batch_bar.close()
 
-    val_acc = num_correct / len(val_loader)
-    print("Validation: {:.04f}%".format(100 * num_correct / len(val_loader)))
+    val_acc = 100 * num_correct / total
+    print("Validation: {:.04f}%".format(100 * num_correct / total))
 
     return val_acc
 
-def test(acc, model, test_loader, logdir):
+def test(model, test_loader, logdir):
     model.eval()
-    batch_bar = tqdm(total=len(test_loader), dynamic_ncols=True, position=0, leave=False, desc='Val')
+    batch_bar = tqdm(total=len(test_loader), dynamic_ncols=True, position=0, leave=False, desc='Test')
 
     res = []
+    total = 0
     for i, (x) in enumerate(test_loader):
         x = x.to(device)
 
         with torch.no_grad():
             outputs = model(x)
+        total += len(x)
+        pred = torch.argmax(outputs, axis=1)
+        res += pred        
         
         batch_bar.update()
         
     batch_bar.close()
 
-    log_result = logdir + 'submission' + str(acc) +'.csv'
+    log_result = logdir + '/result.csv'
     with open(log_result, "w+") as f:
         f.write("id,label\n")
-        for i in range(len(test_loader)):
+        for i in range(len(res)):
             f.write("{},{}\n".format(str(i).zfill(6) + ".jpg", res[i]))
 
     
@@ -151,12 +160,15 @@ if __name__ == '__main__':
     scaler = torch.cuda.amp.GradScaler()
 
     BEST_VAL = 0
+    best_model = model
     for epoch in range(EPOCHS):
         # You can add validation per-epoch here if you would like
         train_acc, train_loss, lr_rate = train(model, train_loader, optimizer, scheduler,
                                                      criterion, scaler, BATCH_SIZE)
         val_acc = validate(model, val_loader, BATCH_SIZE)
-        if BEST_VAL < val_acc:
+        if BEST_VAL <= val_acc:
             save_checkpoint(val_acc, model, optimizer, epoch, logdir)
-            test(val_acc, model, test_loader, logdir)
+            best_model = model
+    
+    test(best_model, test_loader, logdir)
 

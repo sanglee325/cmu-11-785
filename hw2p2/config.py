@@ -13,8 +13,8 @@ def parse_args():
     # model seting options
     parser = argparse.ArgumentParser(description='PyTorch Training')
     parser.add_argument('--lr', default=0.1, type=float, help='learning rate')
-    parser.add_argument('--model', default='resnet32', type=str,
-                        help='model type (default: ResNet32)')
+    parser.add_argument('--model', default='resnet34', type=str,
+                        help='model type (default: ResNet34)')
     parser.add_argument('--batch-size', default=256, type=int, help='batch size')
     parser.add_argument('--epochs', default=20, type=int,
                         help='total epochs to run')
@@ -25,6 +25,8 @@ def parse_args():
     parser.add_argument('--name', default='0', type=str, help='name of run')
     parser.add_argument('--log_path', default="./logs/", type=str,
                         help='path for results')
+    
+    parser.add_argument('--half', action='store_true', help='')
 
     return parser.parse_args()
 
@@ -97,5 +99,6 @@ ARGS = parse_args()
 BATCH_SIZE = ARGS.batch_size
 EPOCHS = ARGS.epochs
 LR = ARGS.lr
+ARCH = ARGS.model
 
 SEED = set_reproducibility(ARGS.seed)
