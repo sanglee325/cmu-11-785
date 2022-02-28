@@ -1,0 +1,3 @@
+# Logfile created on 2021-12-23 13:16:56 -0500 by logger.rb/61378
+INFO -- 12/23/21 14:14:58 -- jkonan@andrew.cmu.edu, 2, {"scores": {"MCQ 1": 1, "MCQ 2": 1, "MCQ 3": 1, "MCQ 4": 1, "MCQ 5": 1, "Conv1D": 30, "Conv2D-forward": 10, "Conv2D-backward": 10, "Padding-Dilation": 10, "CNN as Simple Scanning MLP": 10, "CNN as Distributed Scanning MLP": 10, "Build a CNN Model": 15}}
+INFO -- 12/23/21 14:18:07 -- bwarren2@andrew.cmu.edu, 1, {"scores": {"MCQ 1": 1, "MCQ 2": 1, "MCQ 3": 1, "MCQ 4": 1, "MCQ 5": 1, "Conv1D": 30, "Conv2D-forward": 10, "Conv2D-backward": 10, "Padding-Dilation": 10, "CNN as Simple Scanning MLP": 10, "CNN as Distributed Scanning MLP": 10, "Build a CNN Model": 15}}
