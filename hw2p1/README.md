@@ -12,7 +12,7 @@
 * Install requirements.txt.
 
     ```bash
-    pip install -r requirements.txt -f https://download.pytorch.org/whl/cu113/torch_stable.html
+    pip install -r requirements.txt -f https://download.pytorch.org/whl/torch_stable.html
     ```
 
 ## Kaggle Setup
