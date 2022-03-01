@@ -30,42 +30,33 @@ class BatchNorm1d:
         training phase of the problem or are we in the inference phase.
         So see what values you need to recompute when eval is True.
         """
-        self.Z         = Z
+        
         if eval:
-            self.NZ = (Z - self.running_M) / np.sqrt(self.running_V + self.eps)
-            self.BZ = self.NZ * self.BW + self.Bb
-            return self.BZ
+            # TODO
+            return NotImplemented
             
+        self.Z         = Z
+        self.N         = None # TODO
         
-        self.N         = Z.shape[0] # TODO
+        self.M         = None # TODO
+        self.V         = None # TODO
+        self.NZ        = None # TODO
+        self.BZ        = None # TODO
         
-        self.M         = np.mean(self.Z, axis=0) # TODO
-        self.V         = np.var(self.Z, axis=0) # TODO
-        self.NZ        = (self.Z - self.M) / np.sqrt(self.V + self.eps) # TODO
-        self.BZ        = self.NZ * self.BW + self.Bb # TODO
-        
-        self.running_M = self.alpha * self.running_M + (1 - self.alpha) * self.M # TODO
-        self.running_V = self.alpha * self.running_V + (1 - self.alpha) * self.V # TODO
+        self.running_M = None # TODO
+        self.running_V = None # TODO
         
         return self.BZ
 
     def backward(self, dLdBZ):
-        sqrt_var_plus_eps = np.sqrt(self.V + self.eps)
-        b = dLdBZ.shape[0]
         
-        dLdNZ       = self.BW * dLdBZ # TODO
-        self.dLdBb  = np.sum(dLdBZ, axis=0, keepdims=True) # TODO
-        self.dLdBW  = np.sum(dLdBZ * self.BZ, axis=0, keepdims=True) # TODO
-
-        dLdV = -0.5 * np.sum((dLdNZ * (self.Z - self.M) / (sqrt_var_plus_eps ** 3)), axis=0) # TODO
-        first_term_dmu = -1 * np.sum((dLdNZ / sqrt_var_plus_eps), axis=0)
-        second_term_dmu = -((2*self.dLdBW )/b) * np.sum((self.Z - self.M), axis=0)
-        dLdM = first_term_dmu + second_term_dmu # TODO
+        self.dLdBW  = None # TODO
+        self.dLdBb  = None # TODO
         
-        first_term_dZ = dLdNZ/sqrt_var_plus_eps
-        second_term_dZ = dLdV * (2/b) * (self.Z - self.M)
-        third_term_dZ = dLdM * (1/b)
-
-        dLdZ        = first_term_dZ + second_term_dZ + third_term_dZ # TODO
+        dLdNZ       = None # TODO
+        dLdV        = None # TODO
+        dLdM        = None # TODO
         
-        return  dLdZ
+        dLdZ        = None # TODO
+        
+        return  NotImplemented

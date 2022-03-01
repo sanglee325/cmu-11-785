@@ -20,30 +20,30 @@ class Sigmoid:
     
     def forward(self, Z):
     
-        self.A = 1.0/ (1 + np.exp(-Z))
-        return self.A
+        self.A = None # TODO
+        
+        return NotImplemented
     
     def backward(self):
     
-        dAdZ = self.A * (1 - self.A) # TODO
-        return dAdZ
-        #return NotImplemented
+        dAdZ = None # TODO
+        
+        return NotImplemented
 
 
 class Tanh:
     
     def forward(self, Z):
     
-        self.A = (np.exp(Z) - np.exp(-Z)) / (np.exp(Z) + np.exp(-Z)) # TODO
-        return self.A
-
-        #return NotImplemented
+        self.A = None # TODO
+        
+        return NotImplemented
     
     def backward(self):
     
-        dAdZ = 1 - (self.A ** 2) # TODO
+        dAdZ = None # TODO
         
-        return dAdZ
+        return NotImplemented
 
 
 class ReLU:
@@ -51,17 +51,13 @@ class ReLU:
     def forward(self, Z):
     
         self.A = None # TODO
-
-        greater_than_zero = Z > 0
-        self.A = Z * greater_than_zero
-        return self.A
         
         return NotImplemented
     
     def backward(self):
     
-        dAdZ = ((self.A > 0.0) * 1.0) # TODO
+        dAdZ = None # TODO
         
-        return dAdZ
+        return NotImplemented
         
         

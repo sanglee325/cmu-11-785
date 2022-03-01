@@ -11,63 +11,28 @@ class Linear:
         
         self.debug = debug
 
-    # def forward(self, A):
-    
-    #     self.A    = A
-    #     self.N    = A.shape[0]
-    #     self.Ones = np.ones((self.N,1), dtype="f")
-    #     Z         = self.A @ self.W.T + self.Ones @ self.b.T  # TODO
-        
-    #     return Z
-        
-    # def backward(self, dLdZ):
-    
-    #     dZdA      = self.W.T # TODO
-    #     dZdW      = self.A # TODO
-    #     dZdi      = None
-    #     dZdb      = self.Ones # TODO
-    #     dLdA      = dLdZ @ dZdA.T # TODO
-    #     dLdW      = dLdZ.T @ dZdW # TODO
-    #     dLdi      = None
-    #     dLdb      = dLdZ.T @ dZdb # TODO
-    #     self.dLdW = dLdW / self.N
-    #     self.dLdb = dLdb / self.N
-
-    #     if self.debug:
-            
-    #         self.dZdA = dZdA
-    #         self.dZdW = dZdW
-    #         self.dZdi = dZdi
-    #         self.dZdb = dZdb
-    #         self.dLdA = dLdA
-    #         self.dLdi = dLdi
-        
-    #     return dLdA
-
     def forward(self, A):
     
         self.A    = A
         self.N    = A.shape[0]
         self.Ones = np.ones((self.N,1), dtype="f")
-        Z         = self.A@self.W.T + self.Ones@self.b.T
+        Z         = None # TODO
         
-        return Z
+        return NotImplemented
         
     def backward(self, dLdZ):
     
-        
-        dZdA      = self.W.T
-        dZdW      = self.A
+        dZdA      = None # TODO
+        dZdW      = None # TODO
         dZdi      = None
-        dZdb      = self.Ones
-        print(dLdZ.shape)
-        print(dZdA.shape)
-        dLdA      = np.matmul(dLdZ, dZdA.T)
-        dLdW      = np.multiply(dLdZ , dZdW)
+        dZdb      = None # TODO
+        dLdA      = None # TODO
+        dLdW      = None # TODO
         dLdi      = None
-        dLdb      = np.multiply(dLdZ, dZdb)
+        dLdb      = None # TODO
         self.dLdW = dLdW / self.N
         self.dLdb = dLdb / self.N
+
         if self.debug:
             
             self.dZdA = dZdA
@@ -77,4 +42,4 @@ class Linear:
             self.dLdA = dLdA
             self.dLdi = dLdi
         
-        return dLdA
+        return NotImplemented
