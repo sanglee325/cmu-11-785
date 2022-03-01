@@ -20,44 +20,44 @@ class Sigmoid:
     
     def forward(self, Z):
     
-        self.A = None # TODO
+        self.A = 1/(1 + np.exp(-Z))
         
-        return NotImplemented
+        return self.A
     
     def backward(self):
     
-        dAdZ = None # TODO
+        dAdZ = self.A * (1 - self.A)
         
-        return NotImplemented
+        return dAdZ
 
 
 class Tanh:
     
     def forward(self, Z):
     
-        self.A = None # TODO
+        self.A = np.sinh(Z)/np.cosh(Z)
         
-        return NotImplemented
+        return self.A
     
     def backward(self):
     
-        dAdZ = None # TODO
+        dAdZ = 1 - self.A * self.A
         
-        return NotImplemented
+        return dAdZ
 
 
 class ReLU:
     
     def forward(self, Z):
     
-        self.A = None # TODO
+        self.A = np.maximum(0, Z)
         
-        return NotImplemented
+        return self.A
     
     def backward(self):
     
-        dAdZ = None # TODO
+        dAdZ = (self.A > 0).astype(int)
         
-        return NotImplemented
+        return dAdZ
         
         
