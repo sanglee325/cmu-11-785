@@ -104,7 +104,7 @@ class LibriTestSamples(torch.utils.data.Dataset):
         self.sample = sample 
         
         self.X_dir = data_path + "/" + partition + "/mfcc/"
-        self.X_order_path = "../../../data/test_order.csv"
+        self.X_order_path = "./data/test_order.csv"
         self.X_order = []
         
         with open(self.X_order_path) as f:

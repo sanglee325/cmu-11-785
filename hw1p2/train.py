@@ -9,7 +9,7 @@ from sklearn.metrics import accuracy_score
 
 from data_loader import LibriSamples, LibriItems
 from data_loader import save_checkpoint, LibriTestSamples, LibriTestItems
-from network import Network1024, Network2048
+from network import Network2048
 
 def train(args, model, device, train_samples, optimizer, criterion, epoch):
     model.train()
@@ -77,7 +77,7 @@ def generate_submission(args, model, device, test_samples):
 
                 pred_y_list.extend(pred_y.tolist())
 
-    f = open('result_2048_8_lr005_dpa01_ctx25_e5.csv','w', newline='')
+    f = open('result.csv','w', newline='')
     wr = csv.writer(f)
     wr.writerow(['id', 'label'])
  
@@ -103,7 +103,7 @@ def main(args):
         train(args, model, device, train_samples, optimizer, criterion, epoch)
         test_acc = test(args, model, device, dev_samples)
         print('Dev accuracy ', test_acc)
-        save_checkpoint(model,filename='checkpoint_2048_8_lr005_dpa01_ctx25_e5.pth')
+        save_checkpoint(model,filename='model.pth')
 
     test_samples = LibriTestSamples(data_path = args['LIBRI_PATH'], shuffle=False, partition="test-clean")
     generate_submission(args, model, device, test_samples)
@@ -114,7 +114,7 @@ if __name__ == '__main__':
         'batch_size': 2048,
         'context': 25,
         'log_interval': 1000,
-        'LIBRI_PATH': '../../../data',
+        'LIBRI_PATH': './data/hw1p2_student_data',
         'lr': 5e-4,
         'epoch': 5
     }
