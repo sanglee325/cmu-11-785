@@ -30,7 +30,7 @@ VAL_DIR = osp.join(DATA_DIR, "classification/classification/dev")
 TEST_DIR = osp.join(DATA_DIR, "classification/classification/test")
 
 def load_dataset(batch_size):
-    if ARGS.aug_type == 'none':
+    if ARGS.aug_type is None:
         train_transforms = [transforms.ToTensor()]
     val_transforms = [transforms.ToTensor()]
 
