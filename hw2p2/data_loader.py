@@ -30,7 +30,8 @@ VAL_DIR = osp.join(DATA_DIR, "classification/classification/dev")
 TEST_DIR = osp.join(DATA_DIR, "classification/classification/test")
 
 def load_dataset(batch_size):
-    train_transforms = [transforms.ToTensor()]
+    if ARGS.aug_type == 'none':
+        train_transforms = [transforms.ToTensor()]
     val_transforms = [transforms.ToTensor()]
 
     train_dataset = torchvision.datasets.ImageFolder(TRAIN_DIR,

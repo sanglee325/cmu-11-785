@@ -29,6 +29,9 @@ def parse_args():
     parser.add_argument('--half', action='store_true', help='')
     parser.add_argument('--num_workers', default=4, type=int, help='num workers')
 
+    
+    parser.add_argument('--aug_type', default=None, type=int, help='Data augmentation for Recognition')
+
     return parser.parse_args()
 
 
