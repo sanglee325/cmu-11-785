@@ -113,7 +113,7 @@ def test(model, test_loader, logdir, name):
             outputs = model(x)
         total += len(x)
         pred = torch.argmax(outputs, axis=1)
-        res += pred        
+        res += pred
         
         batch_bar.update()
         
@@ -136,7 +136,9 @@ if __name__ == '__main__':
     print('save path: ', logdir)
     # define model
     # model = torchvision.models.__dict__[ARCH](num_classes=7000)
-    model = sn.Network(num_classes=7000)
+    if ARCH == 'sn':
+        model = sn.Network(num_classes=7000)
+    
     model.to(device)
 
     # For this homework, we're limiting you to 35 million trainable parameters, as
