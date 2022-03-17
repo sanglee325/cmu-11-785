@@ -27,8 +27,8 @@ VAL_DIR = osp.join(DATA_DIR, "classification/classification/dev")
 TEST_DIR = osp.join(DATA_DIR, "classification/classification/test")
 
 def load_dataset(batch_size):
-    mean = (0.5, 0.5, 0.5)
-    std = (0.5, 0.5, 0.5)
+    mean = (0.485, 0.456, 0.406)
+    std = (0.229, 0.224, 0.225)
 
     if ARGS.aug_type is None:
         train_transforms = transforms.Compose([
