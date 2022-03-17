@@ -30,7 +30,8 @@ def parse_args():
     parser.add_argument('--num_workers', default=4, type=int, help='num workers')
 
     
-    parser.add_argument('--aug_type', default=None, type=int, help='Data augmentation for Recognition')
+    parser.add_argument('--aug_type', default=None, type=str, help='Data augmentation for Face Recognition')
+    parser.add_argument('--loss_type', default='ce', type=str, help='Loss Function for Face Recognition')
 
     return parser.parse_args()
 
