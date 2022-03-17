@@ -16,6 +16,7 @@ from sklearn.metrics import roc_auc_score
 import numpy as np
 
 from model import sn, resnet, mobilenet, mobilenetv3
+from model.inception_resnet_v1 import InceptionResnetV1
 
 from data_loader import load_dataset
 from config import *
@@ -145,6 +146,8 @@ if __name__ == '__main__':
         model = mobilenet.MobileNetV2(num_classes=NUM_CLASSES)
     elif ARCH == 'mobilenetv3':
         model = mobilenetv3.mobilenetv3_large(num_classes=NUM_CLASSES)
+    elif ARCH == 'inceptionv1':
+        model = InceptionResnetV1(classify=True, num_classes=NUM_CLASSES)
     
     model.to(device)
 
