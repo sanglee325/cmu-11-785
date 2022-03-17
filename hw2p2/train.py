@@ -15,7 +15,7 @@ from PIL import Image
 from sklearn.metrics import roc_auc_score
 import numpy as np
 
-from model import sn
+from model import sn, resnet, mobilenet 
 
 from data_loader import load_dataset
 from config import *
@@ -136,8 +136,13 @@ if __name__ == '__main__':
     print('save path: ', logdir)
     # define model
     # model = torchvision.models.__dict__[ARCH](num_classes=7000)
+    NUM_CLASSES = 7000
     if ARCH == 'sn':
-        model = sn.Network(num_classes=7000)
+        model = sn.Network(num_classes=NUM_CLASSES)
+    elif ARCH == 'resnet32':
+        model = resnet.resnet32(num_classes=NUM_CLASSES)
+    elif ARCH == 'mobilenet':
+        model = mobilenet.MobileNetV2(num_classes=NUM_CLASSES)
     
     model.to(device)
 
