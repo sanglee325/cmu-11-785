@@ -32,6 +32,7 @@ def parse_args():
     
     parser.add_argument('--aug_type', default=None, type=str, help='Data augmentation for Face Recognition')
     parser.add_argument('--loss_type', default='ce', type=str, help='Loss Function for Face Recognition')
+    parser.add_argument('--optim', default='sgd', type=str, help='Optimizer for Face Recognition')
 
     return parser.parse_args()
 

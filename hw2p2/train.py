@@ -160,9 +160,14 @@ if __name__ == '__main__':
     print("Number of Params: {}".format(num_trainable_parameters))
 
     train_loader, val_loader, test_loader = load_dataset(BATCH_SIZE)
- 
-    optimizer = optim.SGD(model.parameters(), lr=ARGS.lr, momentum=0.9, weight_decay=1e-4)
+
+    if ARGS.optim == 'sgd':
+        optimizer = optim.SGD(model.parameters(), lr=ARGS.lr, momentum=0.9, weight_decay=1e-4)
+    elif ARGS.optim == 'adam':
+        optimizer = optim.Adam(model.parameters(), lr=ARGS.lr)
+        
     scheduler = optim.lr_scheduler.CosineAnnealingLR(optimizer, T_max=(len(train_loader)*EPOCHS))
+    
     criterion = nn.CrossEntropyLoss().to(device)
 
 
