@@ -1,0 +1,94 @@
+Epoch 1/20: Train Loss 5.9644, Learning Rate 0.002000
+Lev Distance: 67.9490
+Saving Model
+
+
+Epoch 2/20: Train Loss 4.8261, Learning Rate 0.002000
+Lev Distance: 69.2005
+
+
+Epoch 3/20: Train Loss 3.5636, Learning Rate 0.002000
+Lev Distance: 75.6854
+
+
+Epoch 4/20: Train Loss 3.3077, Learning Rate 0.002000
+Lev Distance: 75.4974
+
+
+Epoch 5/20: Train Loss 2.9756, Learning Rate 0.002000
+Lev Distance: 73.7687
+
+
+Epoch 6/20: Train Loss 2.6107, Learning Rate 0.002000
+Lev Distance: 66.3736
+Saving Model
+
+
+Epoch 7/20: Train Loss 2.2783, Learning Rate 0.002000
+Lev Distance: 56.2689
+Saving Model
+
+
+Epoch 8/20: Train Loss 2.0323, Learning Rate 0.002000
+Lev Distance: 49.0431
+Saving Model
+
+
+Epoch 9/20: Train Loss 1.8658, Learning Rate 0.002000
+Lev Distance: 44.0339
+Saving Model
+
+
+Epoch 10/20: Train Loss 1.7373, Learning Rate 0.002000
+Lev Distance: 42.6844
+Saving Model
+
+
+Epoch 11/20: Train Loss 1.6340, Learning Rate 0.002000
+Lev Distance: 39.2281
+Saving Model
+
+
+Epoch 12/20: Train Loss 1.5435, Learning Rate 0.002000
+Lev Distance: 37.0190
+Saving Model
+
+
+Epoch 13/20: Train Loss 1.4580, Learning Rate 0.002000
+Lev Distance: 34.7554
+Saving Model
+
+
+Epoch 14/20: Train Loss 1.3771, Learning Rate 0.002000
+Lev Distance: 33.7387
+Saving Model
+
+
+Epoch 15/20: Train Loss 1.3141, Learning Rate 0.002000
+Lev Distance: 32.1415
+Saving Model
+
+
+Epoch 16/20: Train Loss 1.2610, Learning Rate 0.002000
+Lev Distance: 30.3728
+Saving Model
+
+
+Epoch 17/20: Train Loss 1.2152, Learning Rate 0.002000
+Lev Distance: 29.6786
+Saving Model
+
+
+Epoch 18/20: Train Loss 1.1741, Learning Rate 0.002000
+Lev Distance: 28.9688
+Saving Model
+
+
+Epoch 19/20: Train Loss 1.1387, Learning Rate 0.002000
+Lev Distance: 27.9569
+Saving Model
+
+
+Epoch 20/20: Train Loss 1.1069, Learning Rate 0.002000
+Lev Distance: 27.6943
+Saving Model
