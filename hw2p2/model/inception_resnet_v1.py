@@ -13,11 +13,11 @@ class BasicConv2d(nn.Module):
             in_planes, out_planes,
             kernel_size=kernel_size, stride=stride,
             padding=padding, bias=False
-        ) # verify bias false
+        )
         self.bn = nn.BatchNorm2d(
             out_planes,
-            eps=0.001, # value found in tensorflow
-            momentum=0.1, # default pytorch value
+            eps=0.001,
+            momentum=0.1, 
             affine=True
         )
         self.relu = nn.ReLU(inplace=False)
@@ -225,7 +225,8 @@ class InceptionResnetV1(nn.Module):
         )
         self.block8 = Block8(noReLU=True)
         self.avgpool_1a = nn.AdaptiveAvgPool2d(1)
-        self.dropout = nn.Dropout(dropout_prob)
+        self.dropout_orig = nn.Dropout(dropout_prob)
+        self.dropout_sub = nn.Dropout(0.2)
         self.last_linear = nn.Linear(1792, 512, bias=False)
         self.last_bn = nn.BatchNorm1d(512, eps=0.001, momentum=0.1, affine=True)
 
@@ -237,7 +238,7 @@ class InceptionResnetV1(nn.Module):
             self.device = device
             self.to(device)
 
-    def forward(self, x):
+    def forward(self, x, return_feats=False):
         """Calculate embeddings or logits given a batch of input image tensors.
         Arguments:
             x {torch.tensor} -- Batch of image tensors representing faces.
@@ -252,17 +253,25 @@ class InceptionResnetV1(nn.Module):
         x = self.conv2d_4a(x)
         x = self.conv2d_4b(x)
         x = self.repeat_1(x)
+        #x = self.dropout_sub(x) # added
         x = self.mixed_6a(x)
         x = self.repeat_2(x)
+        #x = self.dropout_sub(x) # added
         x = self.mixed_7a(x)
         x = self.repeat_3(x)
+        #x = self.dropout_sub(x) # added
         x = self.block8(x)
         x = self.avgpool_1a(x)
-        x = self.dropout(x)
+        x = self.dropout_orig(x)
         x = self.last_linear(x.view(x.shape[0], -1))
         x = self.last_bn(x)
+
+        if return_feats:
+            return F.normalize(x, p=2, dim=1)
+
         if self.classify:
             x = self.logits(x)
         else:
             x = F.normalize(x, p=2, dim=1)
+
         return x

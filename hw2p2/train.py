@@ -17,6 +17,7 @@ import numpy as np
 
 from model import sn, resnet, mobilenet, mobilenetv3
 from model.inception_resnet_v1 import InceptionResnetV1
+from loss_function import LabelSmoothingLoss
 
 from data_loader import load_dataset
 from config import *
@@ -130,13 +131,12 @@ def test(model, test_loader, logdir, name):
 if __name__ == '__main__':
     # set options for file to run
     logpath = ARGS.log_path
-    logfile_base = f"{ARGS.name}_{ARCH}_S{SEED}_B{BATCH_SIZE}_LR{LR}_E{EPOCHS}"
+    logfile_base = f"{ARGS.name}_{ARCH}_{ARGS.loss_type}_{ARGS.optim}_S{SEED}_B{BATCH_SIZE}_LR{LR}_E{EPOCHS}"
     logdir = logpath + logfile_base
 
     set_logpath(logpath, logfile_base)
     print('save path: ', logdir)
-    # define model
-    # model = torchvision.models.__dict__[ARCH](num_classes=7000)
+
     NUM_CLASSES = 7000
     if ARCH == 'sn':
         model = sn.Network(num_classes=NUM_CLASSES)
@@ -168,7 +168,10 @@ if __name__ == '__main__':
         
     scheduler = optim.lr_scheduler.CosineAnnealingLR(optimizer, T_max=(len(train_loader)*EPOCHS))
     
-    criterion = nn.CrossEntropyLoss().to(device)
+    if ARGS.loss_type == 'ce':
+        criterion = nn.CrossEntropyLoss().to(device)
+    elif ARGS.loss_type == 'smoothce':
+        criterion = LabelSmoothingLoss().to(device)
 
 
     # T_max is "how many times will i call scheduler.step() until it reaches 0 lr?"

@@ -20,6 +20,9 @@ import numpy as np
 from model import sn
 from submit.verification import VerificationDataset
 
+from model import sn, resnet, mobilenet, mobilenetv3
+from model.inception_resnet_v1 import InceptionResnetV1
+
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 cudnn.benchmark = True
@@ -90,7 +93,7 @@ def get_feature(model, data_loader):
     return feats_dict
 
 def measure_similarity(features, csv_file, validation=True):
-    similarity_metric = nn.CosineSimilarity(dim=0, eps=1e-6)
+    similarity_metric = nn.CosineSimilarity(dim=0)
     # Now, loop through the csv and compare each pair, getting the similarity between them
     pred_similarities = []
     gt_similarities = []
@@ -123,7 +126,17 @@ if __name__ == '__main__':
     args = parse_args()
 
     # load model 
-    model = sn.Network(num_classes=7000)
+    NUM_CLASSES = 7000
+    if args.model == 'sn':
+        model = sn.Network(num_classes=NUM_CLASSES)
+    elif args.model == 'resnet32':
+        model = resnet.resnet32(num_classes=NUM_CLASSES)
+    elif args.model == 'mobilenet':
+        model = mobilenet.MobileNetV2(num_classes=NUM_CLASSES)
+    elif args.model == 'mobilenetv3':
+        model = mobilenetv3.mobilenetv3_large(num_classes=NUM_CLASSES)
+    elif args.model == 'inceptionv1':
+        model = InceptionResnetV1(classify=True, num_classes=NUM_CLASSES)
     model.to(device)
     optimizer = optim.SGD(model.parameters(), lr=args.lr, momentum=0.9, weight_decay=1e-4)
 
