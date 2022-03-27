@@ -1,2 +1,5 @@
 /data
 /ctcdecode
+/logs
+
+*.csv
