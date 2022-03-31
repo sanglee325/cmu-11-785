@@ -12,7 +12,7 @@
 * Install requirements.txt.
 
     ```bash
-    pip install -r requirements.txt -f https://download.pytorch.org/whl/cu113/torch_stable.html
+    pip install -r requirements.txt -f https://download.pytorch.org/whl/torch_stable.html
     ```
 
 ## Kaggle Setup
@@ -30,7 +30,8 @@
     ```
 
 * Download dataset.
-    ```
+
+    ```bash
     mkdir data
     cd data
 
@@ -39,5 +40,24 @@
 
     unzip -q 11-785-s22-hw2p2-classification.zip
     unzip -q 11-785-s22-hw2p2-verification.zip
+    ```
+## Run Code
+
+* Train model.
+
+    ```bash
+    python train.py \
+            --num_workers 8 --epochs 50 --model inceptionv1 \
+            --lr 1e-3 --optim adam --loss_type smoothce  \
+            --aug_type basic --log_path ./log-cls/ 
+    ```
+
+* Verify model.
+
+    ```bash
+    python verify.py \
+            --model inceptionv1 \
+            --model_dir <model_dir path> \
+            --model_name <model.pth>
     ```
 
