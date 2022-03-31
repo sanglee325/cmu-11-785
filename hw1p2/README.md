@@ -33,18 +33,3 @@
     ```bash
     kaggle competitions submit -c 11-785-s22-hw1p2 -f <filename.csv> -m "Submmission"
     ```
-
-## Experiment Details
-
-### Model Architectures
-
-* Cylinder
-    * 
-* Pyramid
-    * 
-* Diamond
-    * 
-
-### Dropout, Batch Normalization and Layers
-
-### Context
