@@ -9,18 +9,19 @@ from data.phonemes import *
 
 class Network(nn.Module):
 
-    def __init__(self,input_size=13, hidden_size=256, num_layers=1, num_classes=41): # You can add any extra arguments as you wish
+    def __init__(self,input_size=13, hidden_size=256, num_layers=4, num_classes=41): # You can add any extra arguments as you wish
 
         super(Network, self).__init__()
 
         # Embedding layer converts the raw input into features which may (or may not) help the LSTM to learn better 
         # For the very low cut-off you dont require an embedding layer. You can pass the input directly to the  LSTM
-        self.embedding = nn.Embedding(num_embeddings=2500, 
-                                    embedding_dim=input_size)
+        # self.embedding = 
         
-        self.lstm = nn.LSTM(input_size, hidden_size, num_layers, batch_first=True)# TODO: # Create a single layer, uni-directional LSTM with hidden_size = 256
+        #self.lstm = nn.LSTM(input_size, hidden_size, num_layers, batch_first=True)# TODO: # Create a single layer, uni-directional LSTM with hidden_size = 256
         # Use nn.LSTM() Make sure that you give in the proper arguments as given in https://pytorch.org/docs/stable/generated/torch.nn.LSTM.html
 
+        self.lstm = nn.LSTM(input_size,hidden_size=hidden_size,
+                            num_layers=num_layers,dropout=0.2, bidirectional=True)
         self.classification = nn.Linear(hidden_size, num_classes)# TODO: Create a single classification layer using nn.Linear()
 
     def forward(self, x, X_lens): # TODO: You need to pass atleast 1 more parameter apart from self and x

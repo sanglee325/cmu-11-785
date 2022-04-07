@@ -4,12 +4,10 @@ from torch.nn.utils.rnn import pad_sequence, pack_padded_sequence, pad_packed_se
 import torch.nn.functional as F
 
 from torchsummaryX import summary
-from data.phonemes import *
-
 
 class Network(nn.Module):
 
-    def __init__(self,input_size=13, hidden_size=256, num_layers=3, num_classes=41): # You can add any extra arguments as you wish
+    def __init__(self,input_size=13, hidden_size=256, num_layers=1, num_classes=41): # You can add any extra arguments as you wish
 
         super(Network, self).__init__()
 
@@ -42,4 +40,3 @@ if __name__ == '__main__':
     print("Device: ", device)
     model = Network().to(device)
     print(model)
-    summary(model) # x and lx are from the previous cell
