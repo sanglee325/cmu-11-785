@@ -86,44 +86,12 @@ class LibriSamplesTest(torch.utils.data.Dataset):
         return len(self.X_files)
     
     def __getitem__(self, ind):
-        # TODOs: Need to return only X because this is the test dataset
     
-        X = np.load(os.path.join(self.X_dir, self.X_files[ind]))
+        X = np.load(os.path.join(self.X_dir, self.X_files[ind])) # TODO: Load the mfcc npy file at the ind in the directory
+        X = (X - X.mean(axis=0)) / X.std(axis=0) # ADD: normalize
+        X = torch.FloatTensor(X)
         
-        return torch.from_numpy(X)
-    
-    def collate_fn(batch):
-        batch_x = [x for x in batch]
-        batch_x_pad = pad_sequence(batch_x, batch_first=True) # TODO: pad the sequence with pad_sequence (already imported)
-        lengths_x = [x.shape[0] for x in batch_x] # TODO: Get original lengths of the sequence before padding
-
-        return batch_x_pad, torch.tensor(lengths_x)
-
-
-# You can either try to combine test data in the previous class or write a new Dataset class for test data
-class LibriSamplesTest(torch.utils.data.Dataset):
-
-    def __init__(self, data_path, test_order): # test_order is the csv similar to what you used in hw1
-
-        test_order_list = os.path.join(data_path, "test", test_order)
-        self.X_dir = os.path.join(data_path, "test", "mfcc")
-        self.X_files = []
-
-        with open(test_order_list) as f:
-            f_csv = csv.reader(f)
-            for row in f_csv:
-                self.X_files.append(row[0])
-            self.X_files = self.X_files[1:]
-
-    def __len__(self):
-        return len(self.X_files)
-    
-    def __getitem__(self, ind):
-        # TODOs: Need to return only X because this is the test dataset
-    
-        X = np.load(os.path.join(self.X_dir, self.X_files[ind]))
-        
-        return torch.from_numpy(X)
+        return X
     
     def collate_fn(batch):
         batch_x = [x for x in batch]
@@ -146,7 +114,6 @@ if __name__ == '__main__':
         x, y, lx, ly = data
         print(x.shape, y.shape, lx.shape, ly.shape)
 
-    
     test_dataset = LibriSamplesTest(root, 'test_order.csv')
     test_loader = DataLoader(test_dataset, batch_size=batch_size, shuffle=False, 
                             num_workers=4, collate_fn=LibriSamplesTest.collate_fn)
