@@ -83,9 +83,9 @@ def save_checkpoint(loss, model, optim, epoch, logdir, index=False):
     }
 
     if index:
-        ckpt_name = 'ckpt_epoch' + str(epoch) + '_' + str(SEED) + '.pth'
+        ckpt_name = 'ckpt_' + str(epoch).zfill(3) + '_' + str(SEED) + '.pth'
     else:
-        ckpt_name = 'ckpt_' + str(SEED) + '.pth'
+        ckpt_name = 'ckpt_' + str(SEED).zfill(4) + '.pth'
 
     ckpt_path = os.path.join(logdir, ckpt_name)
     torch.save(state, ckpt_path)

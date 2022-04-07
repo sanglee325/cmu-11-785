@@ -154,10 +154,10 @@ def make_predictions(h, lh, decoder, PHONEME_MAP):
 
     h_string_list = []
     for i in range(batch_size): # Loop through each element in the batch
-        argmax_index = torch.argmax(beam_scores[i])
-        h_sliced = beam_results[i][argmax_index][:out_lens[i][argmax_index]]
+        idx = torch.argmax(beam_scores[i])
+        h_sliced = beam_results[i][idx][:out_lens[i][idx]]
 
-        h_string = [str(PHONEME_MAP[i]) for i in h_sliced] # TODO: MAP the sequence of numbers to its corresponding characters with PHONEME_MAP and merge everything as a single string
+        h_string = [str(PHONEME_MAP[hh]) for hh in h_sliced] # TODO: MAP the sequence of numbers to its corresponding characters with PHONEME_MAP and merge everything as a single string
         h_string = "".join(h_string)
         h_string_list.append(h_string)
     
@@ -211,7 +211,7 @@ if __name__ == '__main__':
     criterion = nn.CTCLoss().to(device)
     #scaler = torch.cuda.amp.GradScaler()
 
-    decoder = CTCBeamDecoder(labels=PHONEME_MAP,log_probs_input=True,beam_width=20)
+    decoder = CTCBeamDecoder(labels=PHONEME_MAP,log_probs_input=True,beam_width=1)
     test_decoder = CTCBeamDecoder(labels=PHONEME_MAP,log_probs_input=True,beam_width=100)
 
     BEST_LOSS = 999
@@ -219,12 +219,11 @@ if __name__ == '__main__':
     best_model = None
     val_interval = 5
     for epoch in range(EPOCHS):
-        # You can add validation per-epoch here if you would like
         train_loss, lr_rate = train(epoch, model, train_loader, optimizer, criterion)
         if (epoch+1) % val_interval == 0:
             val_loss, val_dist = validate(epoch, model, val_loader, criterion, decoder)
             if BEST_DIST >= val_dist:
-                save_checkpoint(val_loss, model, optimizer, epoch, logdir)
+                save_checkpoint(val_loss, model, optimizer, epoch, logdir, index=True)
                 best_model = model
                 BEST_LOSS = val_loss
                 BEST_DIST = val_dist
