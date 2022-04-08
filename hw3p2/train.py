@@ -27,10 +27,10 @@ import warnings
 warnings.filterwarnings('ignore')
 
 
-from model import basic
+from model import basic, biLSTM, ink
 from data_loader import load_dataset
 from config import *
-from data.phonemes import PHONEME_MAP, PHONEMES
+from phonemes import PHONEME_MAP, PHONEMES
 
 
 
@@ -191,7 +191,10 @@ if __name__ == '__main__':
     set_logpath(logpath, logfile_base)
     print('save path: ', logdir)
 
-    model = basic.Network().to(device)
+    if ARGS.model == 'basic':
+        model = basic.Network().to(device)
+    elif ARGS.model == 'biLSTM':
+        model = biLSTM.Network().to(device)
 
     # For this homework, we're limiting you to 35 million trainable parameters, as
     # outputted by this. This is to help constrain your search space and maintain

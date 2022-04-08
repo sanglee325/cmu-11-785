@@ -6,7 +6,7 @@ from torch.utils.data import DataLoader
 from torch.nn.utils.rnn import pad_sequence, pack_padded_sequence, pad_packed_sequence
 import numpy as np
 
-from data.phonemes import *
+from phonemes import *
 
 
 # This cell is where your actual TODOs start
