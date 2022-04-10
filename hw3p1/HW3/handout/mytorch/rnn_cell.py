@@ -69,10 +69,9 @@ class RNNCell(object):
         ht = tanh(Wihxt + bih + Whhht−1 + bhh) 
         """
 
-        h_prime = None # TODO
+        h_prime = self.activation(x @ self.W_ih.T + self.b_ih + h @ self.W_hh.T + self.b_hh) # TODO
 
-        # return h_prime
-        raise NotImplementedError
+        return h_prime
 
     def backward(self, delta, h, h_prev_l, h_prev_t):
         """
@@ -105,18 +104,17 @@ class RNNCell(object):
         # 0) Done! Step backward through the tanh activation function.
         # Note, because of BPTT, we had to externally save the tanh state, and
         # have modified the tanh activation function to accept an optionally input.
-        dz = None # TODO
+        dz = self.activation.derivative(state=h) * delta # TODO
 
         # 1) Compute the averaged gradients of the weights and biases
-        self.dW_ih += None # TODO
-        self.dW_hh += None # TODO
-        self.db_ih += None # TODO
-        self.db_hh += None # TODO
+        self.dW_ih += (h_prev_l.T @ dz).T / batch_size # TODO
+        self.dW_hh += (h_prev_t.T @ dz).T / batch_size # TODO
+        self.db_ih += dz.mean(axis=0) # TODO
+        self.db_hh += dz.mean(axis=0) # TODO
 
         # # 2) Compute dx, dh
-        dx = None # TODO
-        dh = None # TODO
+        dx = dz @ self.W_ih # TODO
+        dh = dz @ self.W_hh # TODO
 
         # 3) Return dx, dh
-        # return dx, dh
-        raise NotImplementedError
+        return dx, dh

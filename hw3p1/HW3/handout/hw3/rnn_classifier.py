@@ -15,12 +15,12 @@ class RNNPhonemeClassifier(object):
         self.num_layers = num_layers
 
         # TODO: Understand then uncomment this code :)
-        # self.rnn = [
-        #     RNNCell(input_size, hidden_size) if i == 0 
-        #         else RNNCell(hidden_size, hidden_size)
-        #             for i in range(num_layers)
-        # ]
-        # self.output_layer = Linear(hidden_size, output_size)
+        self.rnn = [
+             RNNCell(input_size, hidden_size) if i == 0 
+                 else RNNCell(hidden_size, hidden_size)
+                     for i in range(num_layers)
+        ]
+        self.output_layer = Linear(hidden_size, output_size)
 
         # store hidden states at each time step, [(seq_len+1) * (num_layers, batch_size, hidden_size)]
         self.hiddens = []
@@ -90,13 +90,19 @@ class RNNPhonemeClassifier(object):
         #       the parameters as needed. Update hidden.
         #   Similar to above, append a copy of the current hidden array to the hiddens list
         
-        # TODO
+        for t in range(seq_len):
+            x_t = self.x[:, t, :]
+            for layer in range(self.num_layers):
+                x_t = self.rnn[layer].forward(x_t, hidden[layer])
+                hidden[layer] = x_t
+            self.hiddens.append(hidden.copy())
 
+        logits = self.output_layer.forward(self.hiddens[-1][-1,:])
+        
         # Get the outputs from the last time step using the linear layer and return it
         # <--------------------------
-        
-        # return logits
-        raise NotImplementedError
+
+        return logits
 
     def backward(self, delta):
         """RNN Back Propagation Through Time (BPTT).
@@ -142,7 +148,21 @@ class RNNPhonemeClassifier(object):
           as parameters of the network (divide by batch size)
 
         """
-        # TODO
 
-        # return dh / batch_size
-        raise NotImplementedError
+        for t in range(seq_len-1, -1, -1):
+            for layer in range(self.num_layers-1, -1, -1):
+                h_prev_t = self.hiddens[t][layer]
+                h = self.hiddens[t + 1][layer]
+
+                if layer != 0 :
+                    h_prev_l = self.hiddens[t + 1][layer - 1]
+                else:
+                    h_prev_l = self.x[:,t,:]
+
+                delta_h, dh[layer] = self.rnn[layer].backward(dh[layer], h, h_prev_l, h_prev_t)
+
+                if layer != 0:
+                    dh[layer - 1] += delta_h
+
+        return dh / batch_size
+        
