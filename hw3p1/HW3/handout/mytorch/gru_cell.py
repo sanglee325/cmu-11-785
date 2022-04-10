@@ -107,6 +107,16 @@ class GRUCell(object):
         # Add your code here.
         # Define your variables based on the writeup using the corresponding
         # names below.
+        self.z_in =  self.hidden @ self.Wzh.T + self.x @ self.Wzx.T + self.bzx + self.bzh
+        self.z = self.z_act(self.z_in)
+
+        self.r_in = self.hidden @ self.Wrh.T + self.x @ self.Wrx.T + self.brx + self.brh
+        self.r = self.r_act(self.r_in)
+
+        self.n_in = self.r * (self.hidden @ self.Wnh.T + self.bnh) + self.x @ self.Wnx.T + self.bnx
+        self.n = self.h_act(self.n_in)
+
+        h_t = (1 - self.z) * self.n + self.z * h
         
         # This code should not take more than 10 lines. 
         assert self.x.shape == (self.d,)
@@ -117,8 +127,7 @@ class GRUCell(object):
         assert self.n.shape == (self.h,)
         assert h_t.shape == (self.h,) # h_t is the final output of you GRU cell.
 
-        # return h_t
-        raise NotImplementedError
+        return h_t
 
     def backward(self, delta):
         """GRU cell backward.
