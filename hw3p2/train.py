@@ -77,7 +77,7 @@ def calculate_levenshtein(h, y, lh, ly, decoder, PHONEME_MAP):
 
     return dist
 
-def train(epoch, model, train_loader, optimizer, criterion):
+def train(epoch, model, train_loader, optimizer, criterion, scaler, scheduler):
     # Quality of life tip: leave=False and position=0 are needed to make tqdm usable in jupyter
     model.train()
     batch_bar = tqdm(total=len(train_loader), dynamic_ncols=True, leave=False, position=0, desc='Train') 
@@ -91,11 +91,12 @@ def train(epoch, model, train_loader, optimizer, criterion):
         outputs, length = model(x, lx)
 
         loss = criterion(outputs, y, length, ly)
-        loss.backward()
         total_loss += float(loss)
 
-        optimizer.step()
-        optimizer.zero_grad()
+        scaler.scale(loss).backward()
+        scaler.step(optimizer)
+        scaler.update()
+        scheduler.step()
 
         lr_rate = float(optimizer.param_groups[0]['lr'])
 
@@ -212,7 +213,8 @@ if __name__ == '__main__':
         optimizer = optim.Adam(model.parameters(), lr=ARGS.lr)
         
     criterion = nn.CTCLoss().to(device)
-    #scaler = torch.cuda.amp.GradScaler()
+    scaler = torch.cuda.amp.GradScaler()
+    scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(optimizer, T_max=(len(train_loader) * EPOCHS))
 
     decoder = CTCBeamDecoder(labels=PHONEME_MAP,log_probs_input=True,beam_width=1)
     test_decoder = CTCBeamDecoder(labels=PHONEME_MAP,log_probs_input=True,beam_width=100)
@@ -222,7 +224,7 @@ if __name__ == '__main__':
     best_model = None
     val_interval = 5
     for epoch in range(EPOCHS):
-        train_loss, lr_rate = train(epoch, model, train_loader, optimizer, criterion)
+        train_loss, lr_rate = train(epoch, model, train_loader, optimizer, criterion, scaler, scheduler)
         if (epoch+1) % val_interval == 0:
             val_loss, val_dist = validate(epoch, model, val_loader, criterion, decoder)
             if BEST_DIST >= val_dist:
