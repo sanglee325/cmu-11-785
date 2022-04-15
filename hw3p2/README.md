@@ -48,3 +48,11 @@
     mv hw3p2_student_data/hw3p2_student_data/* ./
     rm -rf hw3p2_student_data
     ```
+
+## Train Model
+
+* Run `train.py`.
+
+    ```bash
+    python train.py --name CNN-BILSTM --model biLSTM --epoch 100
+    ```
