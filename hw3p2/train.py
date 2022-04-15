@@ -27,7 +27,7 @@ import warnings
 warnings.filterwarnings('ignore')
 
 
-from model import basic, biLSTM, ink
+from model import basic, biLSTM
 from data_loader import load_dataset
 from config import *
 from phonemes import PHONEME_MAP, PHONEMES
