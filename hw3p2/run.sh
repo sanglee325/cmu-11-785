@@ -1,0 +1,1 @@
+python train.py --name CNN-BILSTM --model biLSTM --epoch 100
